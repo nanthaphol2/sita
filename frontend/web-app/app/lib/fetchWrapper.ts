@@ -1,12 +1,11 @@
 import { getTokenWorkaround } from "@/app/actions/authActions";
-import { getToken } from "next-auth/jwt";
 
 const baseUrl = 'http://localhost:6001/';
 
 async function get(url: string) {
     const requestOptions = {
         method: 'GET',
-        headers: await getHeaders()
+        header: await getHeaders()
     }
 
     const response = await fetch(baseUrl + url, requestOptions);
@@ -17,7 +16,7 @@ async function post(url: string, body: {}) {
     const requestOptions = {
         method: 'POST',
         headers: await getHeaders(),
-        bode: JSON.stringify(body)
+        body: JSON.stringify(body)
     }
     const response = await fetch(baseUrl + url, requestOptions);
     return await handleResponse(response);
@@ -27,17 +26,16 @@ async function put(url: string, body: {}) {
     const requestOptions = {
         method: 'PUT',
         headers: await getHeaders(),
-        bode: JSON.stringify(body)
+        body: JSON.stringify(body)
     }
     const response = await fetch(baseUrl + url, requestOptions);
     return await handleResponse(response);
 }
 
-async function del(url: string, body: {}) {
+async function del(url: string) {
     const requestOptions = {
         method: 'DELETE',
-        headers: await getHeaders(),
-        bode: JSON.stringify(body)
+        header: await getHeaders()
     }
     const response = await fetch(baseUrl + url, requestOptions);
     return await handleResponse(response);
@@ -46,7 +44,7 @@ async function del(url: string, body: {}) {
 
 async function getHeaders() {
     const token = await getTokenWorkaround();
-    const headers = {'Content-type': 'application/json'} as any;
+    const headers = { 'Content-type': 'application/json' } as any;
     if (token) {
         headers.Authorization = 'Bearer ' + token.access_token
     }
